@@ -1,0 +1,25 @@
+linux:
+  hosts:
+  children:
+    rocky:
+      hosts:
+        10.0.5.80:
+          hostname: rocky-1
+          lan_ip: 10.0.5.10
+        10.0.5.81:
+          hostname: rocky-2
+          lan_ip: 10.0.5.11
+        10.0.5.82:
+          hostname: rocky-3
+          lan_ip: 10.0.5.12
+      vars:
+        device: ens33
+
+
+  vars:
+    public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDU4dRYI4Pz6gEUxzmwas8Nh2FxAWlzpfCsrnFhSy6bkO8dkBhMAiHHHey6Nb83ait03TJV62Qtv8Kfpk5NgjGcexqgLSt1QJyKy8zDcMFdPpzwhkPb4NPrDqu3xLVZdhznLdvUnnxptCnum0mRDOfUvZcMKnNw6rmt2zlcPwN7QhWsx5c2+LGXuBPxOTV5y/XSWfWM7mW4R6UfFmb8ZK4LCD8EMwtv3rXMv4mclnonPe7a9elDYlc6YN9Tr2JIV1NMUEoYH4MmSVwLJ4hj3DeqthmJDFPTfR0oMGtOKJr/E34rlzBkLXRwa3v00R0lc5Kfy495sx5BlDVDS0t5Z5b3BuDJHQfc6SIAOqgvDLdlTS65AhlCtN4FZwa/I9EjElHRMxBq6OhE1O7SV9thMnfClwJ4zheDWmzq/KnkfJMtL4TUkPDNJ+Cz4Nk4o9aFVcSzPuaM56gBsTrYm3JW7wojzoFu01ecVkzlgh4su+twJ7cw6sqMWIb6GPrPGKrW/wk= caleb@xubuntu-wan"
+    ansible_user: rangeuser
+    prefix: 24
+    gateway: 10.0.5.2
+    name_server: 10.0.5.5
+    domain: blue1.local

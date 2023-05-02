@@ -261,10 +261,14 @@ function clone{
         $vm_host = Get-VMHost -Name "192.168.7.35"
         $datastore = Get-Datastore -Name "datastore_super25"
         $target_vm = Get-Vm "rocky.9.1.base"
-        $snap = Get-Snapshot -VM $target_vm -Name "Base"
-        $newvmname = Read-Host -Prompt "what is the new vm"
-        $new_vm = New-VM -Name $newvmname -VM $target_vm -LinkedClone -ReferenceSnapshot $snap -VMHost $vm_host -Datastore $datastore -NetworkName "480_LAN"
-        #$new_vm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName "480_LAN"
-        $new_vm | New-Snapshot -Name "Base"
-        Start-VM -VM $newvmname
+        for ($i=1;$i -le 3; $i++){
+            $snap = Get-Snapshot -VM $target_vm -Name "base"
+            $newvmname = "rocky-$i"
+            $new_vm = New-VM -LinkedClone -Name $newvmname -VM $target_vm -ReferenceSnapshot $snap -VMHost $vm_host -Datastore $datastore
+            $new_vm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName "480_LAN"
+            Start-VM -VM $newvmname
+        }
+        
     }
+
+    
