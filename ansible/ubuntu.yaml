@@ -1,21 +1,7 @@
 linux:
   hosts:
   children:
-    rocky:
-      hosts:
-        10.0.5.80:
-          hostname: rocky-1
-          lan_ip: 10.0.5.10
-        10.0.5.81:
-          hostname: rocky-2
-          lan_ip: 10.0.5.11
-        10.0.5.82:
-          hostname: rocky-3
-          lan_ip: 10.0.5.12
-      vars:
-        device: ens33
-  
-  ubuntu:
+    ubuntu:
       hosts:
         10.0.5.92:
           hostname: ubuntu-1

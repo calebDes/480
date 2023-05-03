@@ -52,7 +52,7 @@ function  Select-VM([string] $folder){
     function linked{
         $vm_host = Get-VMHost -Name "192.168.7.35"
         $datastore = Get-Datastore -Name "datastore_super25"
-        $target_vm = Get-VM "480-fw"
+        $target_vm = Get-VM "480_fw"
         $snap = Get-Snapshot -VM $target_vm -Name "base"
         $newvmname = Read-Host -Prompt "what is the new vm"
         $new_vm = New-VM -Name $newvmname -VM $target_vm -LinkedClone -ReferenceSnapshot $snap -VMHost $vm_host -Datastore $datastore
@@ -84,7 +84,6 @@ function  Select-VM([string] $folder){
         $vmhost=Get-VMHost -Name "192.168.7.35"
         $newswitch = Read-Host "switch name?"
         $currentswitches = Get-VirtualSwitch
-        #Check to see if the Switch Exists
         while ($currentswitches){
             if($currentswitches -contains $newswitch){
                     Write-host "A virtual switch with the name '$newswitch' already exists. Please enter a new name:"
@@ -150,7 +149,6 @@ function  Select-VM([string] $folder){
                 $vmName = Read-Host "What VM would you like the IP address for"
                 foreach ($vm in $vmList) {
                 if ($vm.Name -eq $vmName) {
-                    # VM is found, write message and end loop
                     Write-Host "The VM '$vmName' has been found."
                     break
                 }
@@ -198,7 +196,6 @@ function clone{
     $vmName = Read-Host "What VM would you like to pick"
     foreach ($vm in $vmList) {
     if ($vm.Name -eq $vmName) {
-        # VM is found, write message and end loop
         Write-Host "The VM '$vmName' has been found."
         break
     }
@@ -207,19 +204,16 @@ function clone{
         write-Host "Invalid Request"
         $vmName = Read-Host "What VM would you like to pick"
     }
-    #selectfolder
     $snapshot = Get-Snapshot -VM $vm -Name "Base"
     $linkedclone = "{0}.linked" -f $vm.name
     $linkedvm = New-VM -LinkedClone -Name $linkedclone -VM $vmName -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds	
     Get-VM
-    Write-Output "Moving on to creating Full VM"
 
     $newvmname = Read-host -Prompt "What is the new VM name"
     $newvm = New-VM -Name $newvmname -VM $linkedvm -VMHost $vmhost -Datastore $ds
     $newvm | New-Snapshot -Name "base"
     Get-VM
     pause
-    Write-Output "Removing LinkedVM now"
     $linkedvm | Remove-VM
     Get-VM
     } 
@@ -271,4 +265,16 @@ function clone{
         
     }
 
-    
+    function cloner2{
+        $vm_host = Get-VMHost -Name "192.168.7.35"
+        $datastore = Get-Datastore -Name "datastore_super25"
+        $target_vm = Get-Vm "ubuntu-base"
+        for ($i=1;$i -le 2; $i++){
+            $snap = Get-Snapshot -VM $target_vm -Name "Base"
+            $newvmname = "ubuntu-$i"
+            $new_vm = New-VM -LinkedClone -Name $newvmname -VM $target_vm -ReferenceSnapshot $snap -VMHost $vm_host -Datastore $datastore
+            $new_vm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName "480_LAN"
+            Start-VM -VM $newvmname
+        }
+        
+    }    
